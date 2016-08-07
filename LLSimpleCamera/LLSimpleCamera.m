@@ -274,6 +274,7 @@ NSString *const LLSimpleCameraErrorDomain = @"LLSimpleCameraErrorDomain";
         NSDictionary *outputSettings = [[NSDictionary alloc] initWithObjectsAndKeys: AVVideoCodecJPEG, AVVideoCodecKey, nil];
         [self.stillImageOutput setOutputSettings:outputSettings];
         [self.session addOutput:self.stillImageOutput];
+        [self setMirror:_mirror];
     }
     
     //if we had disabled the connection on capture, re-enable it
@@ -343,6 +344,8 @@ NSString *const LLSimpleCameraErrorDomain = @"LLSimpleCameraErrorDomain";
              });
          }
      }];
+    // freeze the screen AFTER the capture call to eliminate the occasional dark image
+    [self.captureVideoPreviewLayer.connection setEnabled:NO];
 }
 
 -(void)capture:(void (^)(LLSimpleCamera *camera, UIImage *image, NSDictionary *metadata, NSError *error))onCapture exactSeenImage:(BOOL)exactSeenImage {
